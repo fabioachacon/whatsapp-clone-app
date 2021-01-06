@@ -27,14 +27,20 @@ function App() {
   {chatId: 1, title: "Mr. Nobody", image: imageUrl},
   {chatId: 2, title: "Mr. Nowhere", image: imageUrl},
   {chatId: 3, title: "Mr. Anywhere", image: imageUrl}]);
+
   const [activeChat, setActiveChat] = useState({});
+  const [user, setUser] = useState({
+    id: 123,
+    avatar: imageUrl,
+    name: "It's a me, Fábio!"
+  });
 
   return (
     <AppWindow>
        <GlobalStyle />
        <SideBar>
           <SideBarHeader>
-            <img src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.w3schools.com%2Fw3images%2Favatar2.png&f=1&nofb=1' alt=""/>
+            <img src={user.avatar} alt=""/>
             <HeaderButtons>
               <div className="header-btn">
                 <DonutLargeIcon style={{color: '#919191'}}/>
@@ -65,7 +71,10 @@ function App() {
        </SideBar>
        <ContentArea>
          {activeChat.chatId !== undefined ? 
-          <ChatWindow /> : <ChatIntro />}
+          <ChatWindow 
+            user={user}
+          /> : 
+          <ChatIntro />}
        </ContentArea>
     </AppWindow>
   );

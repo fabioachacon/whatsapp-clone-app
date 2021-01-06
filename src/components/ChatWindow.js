@@ -1,5 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
+
+import MessageItem from './MessageItem';
+
 import SearchIcon from '@material-ui/icons/Search';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -9,11 +12,12 @@ import SendIcon from '@material-ui/icons/Send';
 import MicIcon from '@material-ui/icons/Mic';
 import EmojiPicker from 'emoji-picker-react';
 
-const ChatWindow = () => {
+const ChatWindow = ({user}) => {
+  
+  const body = useRef();
 
   let recognition = null;
   let SpeachRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 
   if (SpeachRecognition){
     recognition =  new SpeachRecognition();
@@ -22,6 +26,80 @@ const ChatWindow = () => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
+  const [list, setList] = useState([
+    {
+      author: 123, 
+      body: <>Lorem, ipsum dolor sit</>
+    }, 
+    { author: 123,
+      body: <>Lorem, ipsum</>
+    }, 
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+    { author: 1234,
+      body: <>Lorem, ipsum dolor sit</>
+    },
+  ]);
+
+  // useEffect(() => {
+  //     if (body.current.scrollHeight > body.current.offsetHeight){
+  //       body.current.scrollTop = body.current.offsetHeight;
+  //     }
+  // }, [list])
+
+  useEffect(() => {
+    const bodyHeight = body.current.clientHeight;
+    body.current.scrollTop = bodyHeight;
+  }, [list])
 
   const handleEmojiClick = (e, emojiObject) => {
       setText(text + emojiObject.emoji);
@@ -74,8 +152,13 @@ const ChatWindow = () => {
                    </div>
                </ChatWindowHeaderButtons>
            </ChatWindowHeader>
-           <ChatWiwdowBody>
-               
+           <ChatWiwdowBody ref={body}>
+              {list.map((item, key) => 
+                 <MessageItem
+                 user={user}
+                 data={item} 
+                 key={key}/>
+              )}
            </ChatWiwdowBody>
            <ChatWindowEmojiArea emojiOpen={emojiOpen}>
              <EmojiPicker 
@@ -159,12 +242,19 @@ const ChatWindowHeaderButtons = styled.div`
 `;
 
 const ChatWiwdowBody = styled.div`
-  background: red;
-  flex:1;
+  padding: 0.7rem 1.5rem;
+  flex: 1;
   overflow-y: auto;
   background: #E5DDD5;
   background-size: cover;
   background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+  &::-webkit-scrollbar{
+      width: 6px;
+      height: 6px;
+  }
+  &::-webkit-scrollbar-thumb{
+    background: rgba(0, 0, 0, .2);
+  }
 `;
 
 const ChatWindowFooter = styled.div`
