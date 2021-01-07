@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import GlobalStyle from './GlobalStyle';
 import {
   AppWindow, 
@@ -18,6 +18,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import ChatListItem from './components/ChatListItem';
 import ChatIntro from './components/ChatIntro';
 import ChatWindow from './components/ChatWindow';
+import NewChat from './components/NewChat';
+import Login from './components/Login';
 
 
 function App() {
@@ -27,25 +29,39 @@ function App() {
   {chatId: 1, title: "Mr. Nobody", image: imageUrl},
   {chatId: 2, title: "Mr. Nowhere", image: imageUrl},
   {chatId: 3, title: "Mr. Anywhere", image: imageUrl}]);
-
   const [activeChat, setActiveChat] = useState({});
-  const [user, setUser] = useState({
-    id: 123,
-    avatar: imageUrl,
-    name: "It's a me, Fábio!"
-  });
+  const [user, setUser] = useState(null);
+  const [activeContact, setActiveContact] = useState(false);
+
+  const handleLoginData = async (u) => {
+    let newUser = {
+        id: u.uid,
+        name: u.displayName,
+        avatar: u.photoURL,
+    }
+    setUser(newUser);
+  }
+
+  if (!user){
+    return (<Login onReceive={handleLoginData} />)
+  }
 
   return (
     <AppWindow>
        <GlobalStyle />
        <SideBar>
+          <NewChat
+           chatlist={chatlist} 
+           user={user}
+           activeContact={activeContact} 
+           setActiveContact={setActiveContact}/>
           <SideBarHeader>
             <img src={user.avatar} alt=""/>
             <HeaderButtons>
               <div className="header-btn">
                 <DonutLargeIcon style={{color: '#919191'}}/>
               </div>
-              <div className="header-btn">
+              <div onClick={() => setActiveContact(true)} className="header-btn">
                 <ChatIcon style={{color: '#919191'}}/>
               </div>
               <div className="header-btn">
